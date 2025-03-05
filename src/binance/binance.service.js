@@ -16,10 +16,16 @@ export class BinanceService {
 
         const response = await this.#fetch(url)
 
-        const historicalMarketData = await response.json();
+        const historicalTrades = await response.json();
 
-        console.log('historicalMarketData')
-        console.log(historicalMarketData)
+        const currentTimestamp = Date.now()
+
+        let historicalTradesWithinTimeRange = []
+        historicalTrades.forEach((trade) => {
+            if (trade.time > currentTimestamp - this.historicalMarketDataTimeRange) {
+                historicalTradesWithinTimeRange.push(trade)
+            }
+        })
     }
 
     async #fetch(url) {
