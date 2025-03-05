@@ -17,15 +17,24 @@ export class BinanceService {
         const response = await this.#fetch(url)
 
         const historicalTrades = await response.json();
-        console.log('historicalTrades')
-        console.log(historicalTrades)
+        // console.log('historicalTrades')
+        // console.log(historicalTrades)
 
-        let historicalTradesWithinTimeRange
+        const historicalTradesTimeStamps = historicalTrades.map((trade) => {
+            return trade.time
+        })
+
+        const historicalTradesWithinTimeRange = []
         historicalTrades.forEach((trade) => {
-            if (trade.time >= historicalTrades[historicalTrades.length -1].time - this.historicalMarketDataTimeRange) {
+            if (trade.time >= Math.max(historicalTradesTimeStamps) - this.historicalMarketDataTimeRange) {
+                console.log('trade.time')
+                console.log(trade.time)
+
                 historicalTradesWithinTimeRange.push(trade)
             }
         })
+        console.log('historicalTrades[0].time')
+        console.log(historicalTrades[0].time)
 
         return historicalTradesWithinTimeRange
     }
