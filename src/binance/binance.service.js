@@ -17,29 +17,34 @@ export class BinanceService {
         const response = await this.#fetch(url)
 
         const historicalTrades = await response.json();
-        // console.log('historicalTrades')
-        // console.log(historicalTrades)
 
         const historicalTradesTimeStamps = historicalTrades.map((trade) => {
             return trade.time
         })
 
+        const latestHistoricalTradesTimestamp = Math.max(...historicalTradesTimeStamps)
+
         const historicalTradesWithinTimeRange = []
         historicalTrades.forEach((trade) => {
-            if (trade.time >= Math.max(historicalTradesTimeStamps) - this.historicalMarketDataTimeRange) {
-                console.log('trade.time')
-                console.log(trade.time)
+            if (trade.time >= latestHistoricalTradesTimestamp - this.historicalMarketDataTimeRange) {
 
                 historicalTradesWithinTimeRange.push(trade)
             }
         })
-        console.log('historicalTrades[0].time')
-        console.log(historicalTrades[0].time)
 
         return historicalTradesWithinTimeRange
     }
 
-    async #fetch(url) {
+    getDecreaseInPrice() {
+
+    }
+
+    getIncreaseInPrice() {
+
+    }
+
+
+    async #fetch(url, counter = 0) {
         let response
 
         try {
@@ -50,12 +55,16 @@ export class BinanceService {
 
             return response
         } catch (error) {
-            if (response) {
-                console.error('Something went wrong during fetching the data from binance');
-                throw HttpException(error.message, response.status)
-            }
+            if (counter >= 5) { // TODO: remove magic number
+                if (response) {
+                    console.error('Something went wrong during fetching the data from binance');
+                    throw HttpException(error.message, response.status)
+                }
 
-            throw HttpException('internal application error', 500)
+                throw HttpException('internal application error', 500)
+            }
+            console.log(`Unable to connect to binance API, retrying for ${counter} time...`);
+            return await this.#fetch(url, counter)
         }
     }
 }
