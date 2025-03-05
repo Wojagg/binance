@@ -22,10 +22,12 @@ export class BinanceService {
 
         let historicalTradesWithinTimeRange = []
         historicalTrades.forEach((trade) => {
-            if (trade.time > currentTimestamp - this.historicalMarketDataTimeRange) {
+            if (trade.time >= currentTimestamp - this.historicalMarketDataTimeRange) { // TODO: this if check should work but I don't see effects, maybe because of too much data in time range - before response is back many ms are passing
                 historicalTradesWithinTimeRange.push(trade)
             }
         })
+
+        return historicalTradesWithinTimeRange
     }
 
     async #fetch(url) {
@@ -43,9 +45,6 @@ export class BinanceService {
                 console.error('Something went wrong during fetching the data from binance');
                 throw HttpException(error.message, response.status)
             }
-
-            console.error('error');
-            console.error(error);
 
             throw HttpException('internal application error', 500)
         }
