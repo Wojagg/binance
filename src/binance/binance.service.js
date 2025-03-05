@@ -3,20 +3,22 @@ import { HttpException } from "../exception/httpException";
 export class BinanceService {
     binanceApiBaseUrl
     historicalMarketDataUrlSuffix
+    historicalMarketDataTimeRange
 
-    constructor(binanceApiBaseUrl, historicalMarketDataUrlSuffix) {
+    constructor(binanceApiBaseUrl, historicalMarketDataUrlSuffix, historicalMarketDataTimeRange) {
         this.binanceApiBaseUrl = binanceApiBaseUrl
         this.historicalMarketDataUrlSuffix = historicalMarketDataUrlSuffix
+        this.historicalMarketDataTimeRange = historicalMarketDataTimeRange
     }
 
-    async fetchHistoricalMarketData(symbol) {
+    async fetchHistoricalMarketData(symbol, timeRange) {
         const url = `${this.binanceApiBaseUrl}${this.historicalMarketDataUrlSuffix}?symbol=${symbol}`;
 
         const response = await this.#fetch(url)
 
         const historicalMarketData = await response.json();
 
-
+        console.log()
     }
 
     async #fetch(url) {
