@@ -11,23 +11,18 @@ export class BinanceService {
         this.historicalMarketDataTimeRange = historicalMarketDataTimeRange
     }
 
-    async fetchHistoricalMarketData(symbol, timeRange) {
-        const url = `${this.binanceApiBaseUrl}${this.historicalMarketDataUrlSuffix}?symbol=${symbol}`;
+    async fetchHistoricalMarketData(symbol) {
+        const currentTimestamp = Date.now()
+
+        const url = `${this.binanceApiBaseUrl}${this.historicalMarketDataUrlSuffix}?symbol=${symbol}&startTime=${currentTimestamp - this.historicalMarketDataTimeRange}`;
 
         const response = await this.#fetch(url)
 
         const historicalTrades = await response.json();
+        console.log('historicalTrades')
+        console.log(historicalTrades)
 
-        const currentTimestamp = Date.now()
-
-        let historicalTradesWithinTimeRange = []
-        historicalTrades.forEach((trade) => {
-            if (trade.time >= currentTimestamp - this.historicalMarketDataTimeRange) { // TODO: this if check should work but I don't see effects, maybe because of too much data in time range - before response is back many ms are passing
-                historicalTradesWithinTimeRange.push(trade)
-            }
-        })
-
-        return historicalTradesWithinTimeRange
+        return historicalTrades
     }
 
     async #fetch(url) {
