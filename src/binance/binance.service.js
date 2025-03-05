@@ -12,9 +12,7 @@ export class BinanceService {
     }
 
     async fetchHistoricalMarketData(symbol) {
-        const currentTimestamp = Date.now()
-
-        const url = `${this.binanceApiBaseUrl}${this.historicalMarketDataUrlSuffix}?symbol=${symbol}&startTime=${currentTimestamp - this.historicalMarketDataTimeRange}`;
+        const url = `${this.binanceApiBaseUrl}${this.historicalMarketDataUrlSuffix}?symbol=${symbol}`;
 
         const response = await this.#fetch(url)
 
@@ -22,7 +20,14 @@ export class BinanceService {
         console.log('historicalTrades')
         console.log(historicalTrades)
 
-        return historicalTrades
+        let historicalTradesWithinTimeRange
+        historicalTrades.forEach((trade) => {
+            if (trade.time >= historicalTrades[historicalTrades.length -1].time - this.historicalMarketDataTimeRange) {
+                historicalTradesWithinTimeRange.push(trade)
+            }
+        })
+
+        return historicalTradesWithinTimeRange
     }
 
     async #fetch(url) {
