@@ -10,11 +10,31 @@ const main = async (symbol) => {
         config.binance.baseUrl,
         config.binance.historicalMarketData.urlSuffix,
         config.binance.historicalMarketData.timeRange,
+        config.binance.maxRetries,
     )
 
     const historicalMarketData = await binanceService.fetchHistoricalMarketData(symbol)
 
-    const decreaseInPrice = await binanceService.getChangeInPrice(historicalMarketData)
+    let changeInPrice = await binanceService.getChangeInPrice(historicalMarketData)
+
+    let changeText
+    if (changeInPrice > 0) {
+        changeText = 'increased'
+    }
+
+    if (changeInPrice < 0) {
+        changeText = 'decreased'
+    }
+
+    if (changeInPrice > 0) {
+        console.log('price stayed the same in the last ${config.binance.historicalMarketData.timeRange} milliseconds')
+    }
+
+    changeInPrice = Math.abs(changeInPrice)
+
+    console.log(
+        `Price ${changeText} by ${changeInPrice} in the last ${config.binance.historicalMarketData.timeRange} milliseconds`
+    )
 }
 
 // TODO: add arguments from command line etc.

@@ -4,6 +4,7 @@ export const config = {
         historicalMarketData: {
             urlSuffix: process.env.HISTORICAL_MARKET_DATA_URL || 'trades',
             timeRange:  process.env.HISTORICAL_MARKET_TIME_RANGE || 500,
-        }
+        },
+        maxRetries: process.env.MAX_RETRIES || 5,
     }
 }
