@@ -35,14 +35,38 @@ export class BinanceService {
         return historicalTradesWithinTimeRange
     }
 
-    getDecreaseInPrice() {
+    getChangeInPrice(trades) {
+        trades.sort((a, b) => {
+            console.log('a')
+            console.log(a)
+            console.log('b')
+            console.log(b)
 
+            console.log('a.price')
+            console.log(a.price)
+            console.log('b.price')
+            console.log(b.price)
+
+            const aPrice = a.price
+            const bPrice = b.price
+
+            if (aPrice < bPrice) {
+                return -1;
+            }
+
+            if (aPrice > bPrice) {
+                return 1;
+            }
+
+            return 0;
+        });
+
+        const changeInPrice = trades[0].price - trades[-1].price
+        console.log('changeInPrice')
+        console.log(changeInPrice)
+
+        return changeInPrice
     }
-
-    getIncreaseInPrice() {
-
-    }
-
 
     async #fetch(url, counter = 0) {
         let response

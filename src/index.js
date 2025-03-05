@@ -14,8 +14,7 @@ const main = async (symbol) => {
 
     const historicalMarketData = await binanceService.fetchHistoricalMarketData(symbol)
 
-    const decreaseInPrice = await binanceService.getDecreaseInPrice(historicalMarketData)
-    const increaseInPrice = await binanceService.getIncreaseInPrice(historicalMarketData)
+    const decreaseInPrice = await binanceService.getChangeInPrice(historicalMarketData)
 }
 
 // TODO: add arguments from command line etc.
@@ -23,8 +22,12 @@ const mockInsert = 'BTCUSDT'
 
 try {
     await main(mockInsert)
-} catch(error) {
-    if(error instanceof HttpException) {
-        console.log(`Error while fetching, ${error.message}, status code: ${error.statusCode}`)
+} catch (error) {
+    if (error instanceof HttpException) {
+        console.log(`Error while communicating through http, ${error.message}, status code: ${error.statusCode}`)
+        process.exit()
     }
+
+    console.log(`error occurred: ${error.message}`)
+    process.exit(1)
 }
