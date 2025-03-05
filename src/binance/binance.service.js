@@ -37,33 +37,26 @@ export class BinanceService {
 
     getChangeInPrice(trades) {
         trades.sort((a, b) => {
-            console.log('a')
-            console.log(a)
-            console.log('b')
-            console.log(b)
-
-            console.log('a.price')
-            console.log(a.price)
-            console.log('b.price')
-            console.log(b.price)
-
-            const aPrice = a.price
-            const bPrice = b.price
-
-            if (aPrice < bPrice) {
+            if (a.time < b.time) {
                 return -1;
             }
 
-            if (aPrice > bPrice) {
+            if (a.time > b.time) {
                 return 1;
             }
 
             return 0;
-        });
+        })
 
-        const changeInPrice = trades[0].price - trades[-1].price
+        const changeInPrice = trades[0].price - trades[trades.length -1].price
+
         console.log('changeInPrice')
         console.log(changeInPrice)
+
+        console.log('trades[0]')
+        console.log(trades[0])
+        console.log('trades[trades.length -1]')
+        console.log(trades[trades.length -1])
 
         return changeInPrice
     }
