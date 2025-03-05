@@ -1,4 +1,4 @@
-import { HttpException } from "../exception/httpException";
+import { HttpException } from "../exception/httpException.js";
 
 export class BinanceService {
     binanceApiBaseUrl
@@ -18,7 +18,8 @@ export class BinanceService {
 
         const historicalMarketData = await response.json();
 
-        console.log()
+        console.log('historicalMarketData')
+        console.log(historicalMarketData)
     }
 
     async #fetch(url) {
@@ -36,6 +37,9 @@ export class BinanceService {
                 console.error('Something went wrong during fetching the data from binance');
                 throw HttpException(error.message, response.status)
             }
+
+            console.error('error');
+            console.error(error);
 
             throw HttpException('internal application error', 500)
         }

@@ -1,13 +1,12 @@
-import { BinanceService } from "./binance/binance.service";
+import { BinanceService } from "./binance/binance.service.js";
 import * as dotenv from 'dotenv'
+import { config } from './config.js'
 
 dotenv.config()
 
-import { config } from './config'
-
 const main = async (symbol) => {
     const binanceService = new BinanceService(
-        config.binance.historicalMarketData.baseUrl,
+        config.binance.baseUrl,
         config.binance.historicalMarketData.urlSuffix,
         config.binance.historicalMarketData.timeRange,
     )
@@ -18,6 +17,6 @@ const main = async (symbol) => {
 }
 
 // TODO: add arguments from command line etc.
-const mockInsert =
+const mockInsert = 'BTCUSDT'
 
-await main()
+await main(mockInsert)
