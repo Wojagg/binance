@@ -44,7 +44,7 @@ function getResultString (changeInPrice) {
         changeText = 'decreased'
     }
 
-    if (changeInPrice > 0) {
+    if (changeInPrice = 0) {
         return `price stayed the same in the last ${config.binance.historicalMarketData.timeRange} milliseconds`
     }
 
