@@ -17,6 +17,24 @@ const main = async (symbol) => {
 
     let changeInPrice = await binanceService.getChangeInPrice(historicalMarketData)
 
+    console.log(
+        getResultString(changeInPrice)
+    )
+}
+
+try {
+    await main(process.env.SYMBOL)
+} catch (error) {
+    if (error instanceof HttpException) {
+        console.log(`Error while communicating through http, ${error.message}, status code: ${error.statusCode}`)
+        process.exit()
+    }
+
+    console.log(`error occurred: ${error.message}`)
+    process.exit(1)
+}
+
+function getResultString (changeInPrice) {
     let changeText
     if (changeInPrice > 0) {
         changeText = 'increased'
@@ -32,22 +50,5 @@ const main = async (symbol) => {
 
     changeInPrice = Math.abs(changeInPrice)
 
-    console.log(
-        `Price ${changeText} by ${changeInPrice} in the last ${config.binance.historicalMarketData.timeRange} milliseconds`
-    )
-}
-
-// TODO: add arguments from command line etc.
-const mockInsert = 'BTCUSDT'
-
-try {
-    await main(mockInsert)
-} catch (error) {
-    if (error instanceof HttpException) {
-        console.log(`Error while communicating through http, ${error.message}, status code: ${error.statusCode}`)
-        process.exit()
-    }
-
-    console.log(`error occurred: ${error.message}`)
-    process.exit(1)
+    return `Price ${changeText} by ${changeInPrice} in the last ${config.binance.historicalMarketData.timeRange} milliseconds`
 }
