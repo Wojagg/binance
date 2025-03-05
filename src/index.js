@@ -23,7 +23,7 @@ const main = async (symbol) => {
 }
 
 try {
-    await main(process.env.SYMBOL)
+    await main('BTCUSDT')
 } catch (error) {
     if (error instanceof HttpException) {
         console.log(`Error while communicating through http, ${error.message}, status code: ${error.statusCode}`)
@@ -45,7 +45,7 @@ function getResultString (changeInPrice) {
     }
 
     if (changeInPrice > 0) {
-        console.log('price stayed the same in the last ${config.binance.historicalMarketData.timeRange} milliseconds')
+        return 'price stayed the same in the last ${config.binance.historicalMarketData.timeRange} milliseconds'
     }
 
     changeInPrice = Math.abs(changeInPrice)
