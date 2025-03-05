@@ -5,13 +5,13 @@ dotenv.config()
 
 import { config } from './config'
 
-const main = (symbol) => {
+const main = async (symbol) => {
     const binanceService = new BinanceService(
         config.binance.baseUrl,
         config.binance.historicalMarketDataUrlSuffix,
     )
 
-
+    const historicalMarketData = await binanceService.fetchHistoricalMarketData(symbol)
 }
 
-main()
+await main()
