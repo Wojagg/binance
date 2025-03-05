@@ -3,8 +3,13 @@ import * as dotenv from 'dotenv'
 
 dotenv.config()
 
+import { config } from './config'
+
 const main = (symbol) => {
-    const binanceService = new BinanceService()
+    const binanceService = new BinanceService(
+        config.binance.baseUrl,
+        config.binance.historicalMarketDataUrlSuffix,
+    )
 
 
 }
